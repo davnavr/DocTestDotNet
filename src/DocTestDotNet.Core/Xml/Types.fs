@@ -14,4 +14,4 @@ type ParsedTest =
 
 type ParserOutput =
     { AssemblyName: string
-      Tests: System.Collections.Generic.IReadOnlyCollectio<ParsedTest> }
+      Tests: System.Collections.Generic.IReadOnlyCollection<ParsedTest> }

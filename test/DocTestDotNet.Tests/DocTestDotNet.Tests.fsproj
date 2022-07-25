@@ -6,7 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DocTestDotNet.Core\DocTestDotNet.Core.fsproj"/>
+    <PackageReference Include="Expecto" Version="9.0.4" />
+    <ProjectReference Include="..\..\src\DocTestDotNet.Core\DocTestDotNet.Core.fsproj"/>
     <Compile Include="Program.fs" />
   </ItemGroup>
 
