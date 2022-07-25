@@ -1,4 +1,4 @@
-namespace DocTestDotNet
+namespace DocTestDotNet.Xml
 
 open System.Runtime.CompilerServices
 
@@ -7,7 +7,11 @@ type SourceLanguage =
     | CSharp
     | FSharp
 
-type DocumentationTest =
+type ParsedTest =
     { Language: SourceLanguage
       Name: string
       Code: string }
+
+type ParserOutput =
+    { AssemblyName: string
+      Tests: System.Collections.Generic.IReadOnlyCollectio<ParsedTest> }

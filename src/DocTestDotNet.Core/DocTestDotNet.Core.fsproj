@@ -6,10 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="DocumentationTest.fsi" />
-    <Compile Include="DocumentationTest.fs" />
-    <Compile Include="DocumentationParser.fsi" />
-    <Compile Include="DocumentationParser.fs" />
+    <Compile Include="Xml\Types.fs" />
+    <Compile Include="Xml\Parser.fsi" />
+    <Compile Include="Xml\Parser.fs" />
   </ItemGroup>
 
 </Project>
