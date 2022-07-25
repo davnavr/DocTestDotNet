@@ -6,7 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Library.fs" />
+    <Compile Include="DocumentationTest.fsi" />
+    <Compile Include="DocumentationTest.fs" />
+    <Compile Include="DocumentationParser.fsi" />
+    <Compile Include="DocumentationParser.fs" />
   </ItemGroup>
 
 </Project>
