@@ -1,15 +1,11 @@
-module DocTestDotNet.Xml.Parser
+module DocTestDotNet.Xml.DocumentationParser
 
 open System.Xml
 
-type ParseException (message: string) =
-    inherit System.Exception(message)
-
 let parseTestsFromReader (reader: XmlReader) =
     if isNull reader then nullArg (nameof reader)
-    use src = reader
+    use src = reader // TODO: Have an XML parser that ignores unknown elements/attributes
     let tests = ResizeArray()
-    
     { AssemblyName = failwith "TODO"
       Tests = tests }
 

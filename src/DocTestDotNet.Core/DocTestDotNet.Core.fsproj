@@ -7,8 +7,8 @@
 
   <ItemGroup>
     <Compile Include="Xml\Types.fs" />
-    <Compile Include="Xml\Parser.fsi" />
-    <Compile Include="Xml\Parser.fs" />
+    <Compile Include="Xml\DocumentationParser.fsi" />
+    <Compile Include="Xml\DocumentationParser.fs" />
   </ItemGroup>
 
 </Project>
