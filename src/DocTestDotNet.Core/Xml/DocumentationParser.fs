@@ -15,7 +15,7 @@ let parseTestsFromReader (reader: XmlReader) =
     xml.ReadStartElement "doc"
     xml.ReadStartElement "assembly"
     xml.ReadStartElement "name"
-    let parsedAssemblyName = xml.ReadInnerXml()
+    let parsedAssemblyName = xml.ReadString()
     xml.ReadEndElement()
     xml.ReadEndElement()
     xml.ReadStartElement "members"
@@ -38,7 +38,7 @@ let parseTestsFromReader (reader: XmlReader) =
                         | "fs" | "fsharp" -> SourceLanguage.FSharp
                         | bad -> parseFailed "invalid testLang attribute value %s" bad
 
-                    tests.Add { Language = language; Name = docTestName; Code = xml.ReadInnerXml() }
+                    tests.Add { Language = language; Name = docTestName; Code = xml.ReadString() }
                         
             members.Add { Member = rawMemberName; Tests = tests.ToImmutable() }
 
