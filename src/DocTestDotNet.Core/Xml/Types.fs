@@ -1,7 +1,6 @@
 namespace DocTestDotNet.Xml
 
 open System.Collections.Immutable
-open System.Runtime.CompilerServices
 
 [<NoComparison; NoEquality>]
 type ParsedTest =

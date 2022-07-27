@@ -9,6 +9,9 @@
     <Compile Include="Xml\Types.fs" />
     <Compile Include="Xml\DocumentationParser.fsi" />
     <Compile Include="Xml\DocumentationParser.fs" />
+    <Compile Include="Writer\Types.fs" />
+    <Compile Include="Writer\TestWriter.fsi" />
+    <Compile Include="Writer\TestWriter.fs" />
   </ItemGroup>
 
 </Project>
