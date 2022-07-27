@@ -9,7 +9,9 @@ type ParseException =
     inherit System.Exception
 
 /// <summary>Attempts to parse an XML document for documentation tests.</summary>
-/// <exception cref="T:DocTestDotNet.Xml.DocumentationParser.ParseException">Thrown if the documentation is not valid.</exception>
+/// <exception cref="T:DocTestDotNet.Xml.DocumentationParser.ParseException">
+/// Thrown if the documentation is not valid.
+/// </exception>
 /// <exception cref="T:System.Xml.XmlException">Thrown if an error occured while parsing the XML document.</exception>
 val parseTestsFromReader : reader: XmlReader -> ParserOutput
 

@@ -3,15 +3,14 @@ namespace DocTestDotNet.Xml
 open System.Collections.Immutable
 open System.Runtime.CompilerServices
 
-[<RequireQualifiedAccess; IsReadOnly; Struct; NoComparison; StructuralEquality>]
-type SourceLanguage =
-    | CSharp
-    | FSharp
-
 [<NoComparison; NoEquality>]
 type ParsedTest =
-    { Language: SourceLanguage
+    { SourceLanguage: string
       Name: string
+      /// <summary>
+      /// If set to <see langword="true"/>, indicates that an entry point method should not be automatically generated.
+      /// </summary>
+      OmitMainMethod: bool
       Code: string }
 
 [<NoComparison; NoEquality>]

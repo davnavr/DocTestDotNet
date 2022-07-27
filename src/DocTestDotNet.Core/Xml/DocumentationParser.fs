@@ -32,13 +32,11 @@ let parseTestsFromReader (reader: XmlReader) =
             while xml.ReadToDescendant "code" do
                 let docTestName = xml.GetAttribute "testName"
                 if docTestName <> null then
-                    let language =
-                        match xml.GetAttribute "testLanguage" with
-                        | "cs" | "csharp" -> SourceLanguage.CSharp
-                        | "fs" | "fsharp" -> SourceLanguage.FSharp
-                        | bad -> parseFailed "invalid testLang attribute value %s" bad
-
-                    tests.Add { Language = language; Name = docTestName; Code = xml.ReadString() }
+                    tests.Add
+                        { SourceLanguage = xml.GetAttribute "testLanguage"
+                          Name = docTestName
+                          OmitMainMethod = xml.GetAttribute "omitMainMethod" = "true"
+                          Code = xml.ReadString() }
                         
             members.Add { Member = rawMemberName; Tests = tests.ToImmutable() }
 
