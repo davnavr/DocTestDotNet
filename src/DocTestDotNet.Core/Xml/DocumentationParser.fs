@@ -33,7 +33,7 @@ let parseTestsFromReader (reader: XmlReader) =
                 let docTestName = xml.GetAttribute "testName"
                 if docTestName <> null then
                     let language =
-                        match xml.GetAttribute "testLang" with
+                        match xml.GetAttribute "testLanguage" with
                         | "cs" | "csharp" -> SourceLanguage.CSharp
                         | "fs" | "fsharp" -> SourceLanguage.FSharp
                         | bad -> parseFailed "invalid testLang attribute value %s" bad
