@@ -100,6 +100,8 @@ module TestWriter =
                 let testProjectPath = Path.Combine(testProjectDirectory, safeTestName + "." + writer.ProjectFileExtension)
                 let testSourcePath = Path.Combine(testProjectDirectory, safeTestName + "." + writer.SourceFileExtension)
 
+                Directory.CreateDirectory testProjectDirectory |> ignore
+
                 do
                     use testProjectWriter = XmlWriter.Create testProjectPath
                     writer.WriteProjectFile(
