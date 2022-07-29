@@ -14,7 +14,6 @@ type ITestWriter =
     abstract WriteProjectFile :
         sources: ImmutableArray<string> *
         references: IReadOnlyCollection<ProjectReference> *
-        targetFramework: string *
         destination: System.Xml.XmlWriter -> unit
 
 [<Sealed; Class>]

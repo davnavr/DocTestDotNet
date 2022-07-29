@@ -18,16 +18,10 @@ type ITestWriter =
     abstract WriteProjectFile :
         sources: ImmutableArray<string> *
         references: IReadOnlyCollection<ProjectReference> *
-        targetFramework: string *
         destination: XmlWriter -> unit
 
 [<AutoOpen>]
 module Helpers =
-    let writeProjectProperties tfm (xml: XmlWriter) =
-        xml.WriteStartElement "PropertyGroup"
-        xml.WriteElementString("TargetFramework", tfm)
-        xml.WriteEndElement()
-
     let writeProjectReferences (references: IReadOnlyCollection<ProjectReference>) (xml: XmlWriter) =
         if references.Count > 0 then
             xml.WriteStartElement "ItemGroup"
@@ -61,9 +55,8 @@ type CSharpTestWriter private () =
                 destination.WriteLine "}"
             destination.WriteLine()
 
-        member _.WriteProjectFile(_, references, tfm, destination) =
+        member _.WriteProjectFile(_, references, destination) =
             // No need to explicitly include sources, since C# projects automatically include source files in the same directory.
-            writeProjectProperties tfm destination
             writeProjectReferences references destination
 
 [<Sealed>]
@@ -77,13 +70,12 @@ type FSharpTestWriter private () =
         member _.WriteSourceCode(code, destination) =
             raise(System.NotImplementedException())
 
-        member _.WriteProjectFile(sources, references, tfm, destination) =
+        member _.WriteProjectFile(sources, references, destination) =
             for path in sources do
                 destination.WriteStartElement "Compile"
                 destination.WriteAttributeString("Include", path)
                 destination.WriteEndElement()
 
-            writeProjectProperties tfm destination
             writeProjectReferences references destination
 
 module TestWriter =
@@ -118,14 +110,11 @@ module TestWriter =
 
                     testProjectWriter.WriteStartElement "Project"
                     testProjectWriter.WriteAttributeString("Sdk", "Microsoft.NET.Sdk")
-
-                    writer.WriteProjectFile(
-                        ImmutableArray.Create testSourcePath,
-                        references,
-                        testTargetFramework,
-                        testProjectWriter
-                    )
-
+                    testProjectWriter.WriteStartElement "PropertyGroup"
+                    testProjectWriter.WriteElementString("OutputType", "Exe")
+                    testProjectWriter.WriteElementString("TargetFramework", testTargetFramework)
+                    testProjectWriter.WriteEndElement()
+                    writer.WriteProjectFile(ImmutableArray.Create testSourcePath, references, testProjectWriter)
                     testProjectWriter.WriteEndElement()
 
                 do
