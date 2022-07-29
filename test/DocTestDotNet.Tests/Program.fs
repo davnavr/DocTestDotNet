@@ -29,7 +29,7 @@ let main argv =
             Expect.equal output.Assembly "MyAssemblyName" "assembly name is incorrect"
             Expect.equal output.Members[0].Member "T:MyNamespace.MyType" "member name is incorrect"
             Expect.equal output.Members[0].Tests[0].Name "HelloExample" "test name is incorrect"
-            Expect.equal output.Members[0].Tests[0].Language SourceLanguage.CSharp "test code is incorrect"
+            Expect.equal output.Members[0].Tests[0].SourceLanguage "csharp" "test code is incorrect"
     ]
     |> runTestsWithCLIArgs List.empty argv
     |> exit
