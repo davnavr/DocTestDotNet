@@ -3,7 +3,7 @@ namespace DocTestDotNet.Writer
 [<RequireQualifiedAccess; NoComparison; StructuralEquality>]
 type SourceCodeKind =
     | Full
-    | WithMain
+    | WithMain //of ``namespace````: string
 
 [<NoComparison; NoEquality>]
 type SourceCode =

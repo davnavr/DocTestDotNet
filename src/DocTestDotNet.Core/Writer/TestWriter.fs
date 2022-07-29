@@ -48,7 +48,18 @@ type CSharpTestWriter private () =
         member _.SourceFileExtension = "cs"
 
         member _.WriteSourceCode(code, destination) =
-            raise(System.NotImplementedException())
+            match code.Kind with
+            | SourceCodeKind.Full ->
+                destination.WriteLine code.Code
+            | SourceCodeKind.WithMain ->
+                destination.WriteLine "namespace Test {"
+                destination.WriteLine "public static class Entry {"
+                destination.WriteLine "public static void Main() {"
+                destination.WriteLine code.Code
+                destination.WriteLine "}"
+                destination.WriteLine "}"
+                destination.WriteLine "}"
+            destination.WriteLine()
 
         member _.WriteProjectFile(_, references, tfm, destination) =
             // No need to explicitly include sources, since C# projects automatically include source files in the same directory.
