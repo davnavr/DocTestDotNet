@@ -13,6 +13,7 @@ type ITestWriter =
     abstract WriteProjectFile :
         sources: ImmutableArray<string> *
         references: ImmutableArray<ProjectReference> *
+        targetFramework: string *
         destination: System.Xml.XmlWriter -> unit
 
 [<Sealed; Class>]
@@ -29,8 +30,8 @@ type FSharpTestWriter =
 
 [<RequireQualifiedAccess>]
 module TestWriter =
-    val csharp : CSharpTestWriter
-    val fsharp : FSharpTestWriter
+    val csharp : ITestWriter
+    val fsharp : ITestWriter
 
     type WriterLookup = System.Collections.Generic.IReadOnlyDictionary<string, ITestWriter>
 
@@ -39,6 +40,7 @@ module TestWriter =
     val writeTestsToPath :
         path: string ->
         references: ImmutableArray<ProjectReference> ->
+        testTargetFramework: string ->
         writers: WriterLookup ->
         tests: DocTestDotNet.Xml.ParserOutput ->
         ImmutableArray<string>

@@ -17,10 +17,16 @@ type ITestWriter =
     abstract WriteProjectFile :
         sources: ImmutableArray<string> *
         references: ImmutableArray<ProjectReference> *
+        targetFramework: string *
         destination: XmlWriter -> unit
 
 [<AutoOpen>]
 module Helpers =
+    let writeProjectProperties tfm (xml: XmlWriter) =
+        xml.WriteStartElement "PropertyGroup"
+        xml.WriteElementString("TargetFramework", tfm)
+        xml.WriteEndElement()
+
     let writeProjectReferences (references: ImmutableArray<ProjectReference>) (xml: XmlWriter) =
         if not references.IsDefaultOrEmpty then
             xml.WriteStartElement "ItemGroup"
@@ -43,8 +49,9 @@ type CSharpTestWriter private () =
         member _.WriteSourceCode(code, destination) =
             raise(System.NotImplementedException())
 
-        member _.WriteProjectFile(_, references, destination) =
+        member _.WriteProjectFile(_, references, tfm, destination) =
             // No need to explicitly include sources, since C# projects automatically include source files in the same directory.
+            writeProjectProperties tfm destination
             writeProjectReferences references destination
 
 [<Sealed>]
@@ -58,17 +65,18 @@ type FSharpTestWriter private () =
         member _.WriteSourceCode(code, destination) =
             raise(System.NotImplementedException())
 
-        member _.WriteProjectFile(sources, references, destination) =
+        member _.WriteProjectFile(sources, references, tfm, destination) =
             for path in sources do
                 destination.WriteStartElement "Compile"
                 destination.WriteAttributeString("Include", path)
                 destination.WriteEndElement()
 
+            writeProjectProperties tfm destination
             writeProjectReferences references destination
 
 module TestWriter =
-    let csharp = CSharpTestWriter.Instance
-    let fsharp = FSharpTestWriter.Instance
+    let csharp = CSharpTestWriter.Instance :> ITestWriter
+    let fsharp = FSharpTestWriter.Instance :> ITestWriter
 
     type WriterLookup = System.Collections.Generic.IReadOnlyDictionary<string, ITestWriter>
 
@@ -78,7 +86,7 @@ module TestWriter =
             .Add("fsharp", fsharp)
         :> WriterLookup
 
-    let writeTestsToPath path references (writers: WriterLookup) (tests: ParserOutput) =
+    let writeTestsToPath path references testTargetFramework (writers: WriterLookup) (tests: ParserOutput) =
         Directory.CreateDirectory path |> ignore
 
         let projectFilePaths = ImmutableArray.CreateBuilder()
@@ -96,7 +104,12 @@ module TestWriter =
 
                 do
                     use testProjectWriter = XmlWriter.Create testProjectPath
-                    writer.WriteProjectFile(ImmutableArray.Create testSourcePath, references, testProjectWriter)
+                    writer.WriteProjectFile(
+                        ImmutableArray.Create testSourcePath,
+                        references,
+                        testTargetFramework,
+                        testProjectWriter
+                    )
 
                 do
                     let source =
