@@ -21,12 +21,17 @@ let beginTestExecution (options: Options) (tests: seq<string>) =
 
         let dotnet = Process.Start config
         let! errors = Async.AwaitTask(dotnet.StandardError.ReadToEndAsync())
-        let! token = Async.CancellationToken
-        let! () = Async.AwaitTask(dotnet.WaitForExitAsync token)
-        return
-            if dotnet.ExitCode = 0
-            then None
-            else Some { Message = errors; ExitCode = dotnet.ExitCode }
+
+        dotnet.WaitForExit()
+
+        if dotnet.ExitCode = 0
+        then return None
+        else return Some { Message = errors; ExitCode = dotnet.ExitCode }
+        // let! () = Async.AwaitTask(dotnet.WaitForExitAsync token)
+        // return
+        //     if dotnet.ExitCode = 0
+        //     then None
+        //     else Some { Message = errors; ExitCode = dotnet.ExitCode }
     })
     |> Async.Parallel
 
