@@ -7,4 +7,6 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
+  <Import Project="$(MSBuildProjectDirectory)\..\..\src\DocTestDotNet.Build\DocTestDotNet.targets"/> 
+
 </Project>

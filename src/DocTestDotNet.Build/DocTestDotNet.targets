@@ -1,0 +1,11 @@
+<Project>
+    <Target Name="DocTestDotNet" AfterTargets="Build">
+        <PropertyGroup>
+            <_DocTestXmlName>$(DocumentationFile)</_DocTestXmlName>
+            <_DocTestXmlName Condition="'$(DocumentationFile)'==''">$(AssemblyName).xml</_DocTestXmlName>
+            <_DocTestXmlFile>$(MSBuildProjectDirectory)\$(OutDir)\$(_DocTestXmlName)</_DocTestXmlFile>
+        </PropertyGroup>
+        <!--TODO: DocumentationFile contains name, simply need to append path info-->
+        <Message Text="$(_DocTestXmlFile)" Importance="high" />
+    </Target>
+</Project>

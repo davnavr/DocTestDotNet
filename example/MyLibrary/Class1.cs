@@ -1,5 +1,6 @@
 ﻿namespace MyLibrary;
 
+/// <summary>Provides some stuff.</summary>
 public static class Helpers
 {
     /// <summary>This is a method.</summary>
