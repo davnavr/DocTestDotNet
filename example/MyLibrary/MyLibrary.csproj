@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <_DocTestToolPath>$(MSBuildProjectDirectory)\..\..\src\DocTestDotNet\bin\Debug\net6.0\DocTestDotNet.dll</_DocTestToolPath>
   </PropertyGroup>
 
   <Import Project="$(MSBuildProjectDirectory)\..\..\src\DocTestDotNet.Build\DocTestDotNet.targets"/> 

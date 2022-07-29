@@ -4,8 +4,11 @@
             <_DocTestXmlName>$(DocumentationFile)</_DocTestXmlName>
             <_DocTestXmlName Condition="'$(DocumentationFile)'==''">$(AssemblyName).xml</_DocTestXmlName>
             <_DocTestXmlFile>$(MSBuildProjectDirectory)\$(OutDir)\$(_DocTestXmlName)</_DocTestXmlFile>
+            <_DocTestToolPath Condition="'$(_DocTestToolPath)'==''">$(MSBuildThisFileDirectory)\ToolDoesNotExistYet\DocTestDotNet.dll</_DocTestToolPath>
         </PropertyGroup>
-        <!--TODO: DocumentationFile contains name, simply need to append path info-->
-        <Message Text="$(_DocTestXmlFile)" Importance="high" />
+
+        <Exec
+            Command="dotnet exec &quot;$(_DocTestToolPath)&quot; -i &quot;$(__DocTestXmlFile)&quot; --help"
+            ConsoleToMsBuild="true" />
     </Target>
 </Project>
