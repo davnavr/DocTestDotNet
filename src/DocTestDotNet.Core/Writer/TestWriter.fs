@@ -25,9 +25,8 @@ module Helpers =
             for r in references do
                 match r with
                 | ProjectReference.Dll path ->
-                    //xml.WriteStartElement ""
-                    failwith "TODO: Add reference to assembly"
-
+                    xml.WriteStartElement "Reference"
+                    xml.WriteAttributeString("Include", path)
                 xml.WriteEndElement()
             xml.WriteEndElement()
 
