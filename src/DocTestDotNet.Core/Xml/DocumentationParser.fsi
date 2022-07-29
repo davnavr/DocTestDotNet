@@ -8,7 +8,7 @@ open System.Xml
 type ParseException =
     inherit System.Exception
 
-/// <summary>Attempts to parse an XML document for documentation tests.</summary>
+/// <summary>Attempts to parse an XML document for documentation tests, disposing the <paramref name="reader"/>.</summary>
 /// <exception cref="T:DocTestDotNet.Xml.DocumentationParser.ParseException">
 /// Thrown if the documentation is not valid.
 /// </exception>

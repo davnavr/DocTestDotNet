@@ -1,5 +1,6 @@
 namespace DocTestDotNet.Writer
 
+open System.Collections.Generic
 open System.Collections.Immutable
 
 [<Interface>]
@@ -12,7 +13,7 @@ type ITestWriter =
 
     abstract WriteProjectFile :
         sources: ImmutableArray<string> *
-        references: ImmutableArray<ProjectReference> *
+        references: IReadOnlyCollection<ProjectReference> *
         targetFramework: string *
         destination: System.Xml.XmlWriter -> unit
 
@@ -33,14 +34,14 @@ module TestWriter =
     val csharp : ITestWriter
     val fsharp : ITestWriter
 
-    type WriterLookup = System.Collections.Generic.IReadOnlyDictionary<string, ITestWriter>
+    type WriterLookup = IReadOnlyDictionary<string, ITestWriter>
 
     val defaultWriterLookup : WriterLookup
 
     val writeTestsToPath :
         path: string ->
-        references: ImmutableArray<ProjectReference> ->
+        references: IReadOnlyCollection<ProjectReference> ->
         testTargetFramework: string ->
         writers: WriterLookup ->
         tests: DocTestDotNet.Xml.ParserOutput ->
-        ImmutableArray<string>
+        IReadOnlyCollection<string>

@@ -1,8 +1,7 @@
 module DocTestDotNet.Runner.TestRunner
 
-open System.Collections.Immutable
+open System.Collections.Generic
 open System.Diagnostics
-open System.Threading
 
 type Failure = { Message: string; ExitCode: int }
 
@@ -38,10 +37,10 @@ let beginTestExecution (options: Options) (tests: seq<string>) =
 let execute options tests =
     async {
         let! results = beginTestExecution options tests
-        let errors = ImmutableArray.CreateBuilder results.Length
+        let errors = List results.Length
         for r in results do
             match r with
             | Some failure -> errors.Add failure
             | None -> ()
-        return errors.ToImmutable()
+        return errors :> IReadOnlyCollection<_>
     }

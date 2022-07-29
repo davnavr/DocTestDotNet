@@ -1,5 +1,6 @@
 namespace DocTestDotNet.Writer
 
+open System.Collections.Generic
 open System.Collections.Immutable
 open System.IO
 open System.Xml
@@ -16,7 +17,7 @@ type ITestWriter =
 
     abstract WriteProjectFile :
         sources: ImmutableArray<string> *
-        references: ImmutableArray<ProjectReference> *
+        references: IReadOnlyCollection<ProjectReference> *
         targetFramework: string *
         destination: XmlWriter -> unit
 
@@ -27,8 +28,8 @@ module Helpers =
         xml.WriteElementString("TargetFramework", tfm)
         xml.WriteEndElement()
 
-    let writeProjectReferences (references: ImmutableArray<ProjectReference>) (xml: XmlWriter) =
-        if not references.IsDefaultOrEmpty then
+    let writeProjectReferences (references: IReadOnlyCollection<ProjectReference>) (xml: XmlWriter) =
+        if references.Count > 0 then
             xml.WriteStartElement "ItemGroup"
             for r in references do
                 match r with
@@ -81,15 +82,12 @@ module TestWriter =
     type WriterLookup = System.Collections.Generic.IReadOnlyDictionary<string, ITestWriter>
 
     let defaultWriterLookup =
-        ImmutableDictionary.Empty
-            .Add("csharp", csharp :> ITestWriter)
-            .Add("fsharp", fsharp)
-        :> WriterLookup
+        ImmutableDictionary.Empty.Add("csharp", csharp).Add("fsharp", fsharp) :> WriterLookup
 
     let writeTestsToPath path references testTargetFramework (writers: WriterLookup) (tests: ParserOutput) =
         Directory.CreateDirectory path |> ignore
 
-        let projectFilePaths = ImmutableArray.CreateBuilder()
+        let projectFilePaths = List()
 
         for mber in tests.Members do
             for test in mber.Tests do
@@ -121,4 +119,4 @@ module TestWriter =
 
                 projectFilePaths.Add testProjectPath
 
-        projectFilePaths.ToImmutable()
+        projectFilePaths :> IReadOnlyCollection<_>
