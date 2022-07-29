@@ -12,6 +12,9 @@
     <Compile Include="Writer\Types.fs" />
     <Compile Include="Writer\TestWriter.fsi" />
     <Compile Include="Writer\TestWriter.fs" />
+    <Compile Include="Runner\Options.fs" />
+    <Compile Include="Runner\TestRunner.fsi" />
+    <Compile Include="Runner\TestRunner.fs" />
   </ItemGroup>
 
 </Project>
