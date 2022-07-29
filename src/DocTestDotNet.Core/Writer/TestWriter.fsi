@@ -31,3 +31,14 @@ type FSharpTestWriter =
 module TestWriter =
     val csharp : CSharpTestWriter
     val fsharp : FSharpTestWriter
+
+    type WriterLookup = System.Collections.Generic.IReadOnlyDictionary<string, ITestWriter>
+
+    val defaultWriterLookup : WriterLookup
+
+    val writeTestsToPath :
+        path: string ->
+        references: ImmutableArray<ProjectReference> ->
+        writers: WriterLookup ->
+        tests: DocTestDotNet.Xml.ParserOutput ->
+        ImmutableArray<string>

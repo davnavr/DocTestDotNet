@@ -4,6 +4,8 @@ open System.Collections.Immutable
 open System.IO
 open System.Xml
 
+open DocTestDotNet.Xml
+
 [<Interface>]
 type ITestWriter =
     abstract ProjectFileExtension : string
@@ -67,3 +69,43 @@ type FSharpTestWriter private () =
 module TestWriter =
     let csharp = CSharpTestWriter.Instance
     let fsharp = FSharpTestWriter.Instance
+
+    type WriterLookup = System.Collections.Generic.IReadOnlyDictionary<string, ITestWriter>
+
+    let defaultWriterLookup =
+        ImmutableDictionary.Empty
+            .Add("csharp", csharp :> ITestWriter)
+            .Add("fsharp", fsharp)
+        :> WriterLookup
+
+    let writeTestsToPath path references (writers: WriterLookup) (tests: ParserOutput) =
+        Directory.CreateDirectory path |> ignore
+
+        let projectFilePaths = ImmutableArray.CreateBuilder()
+
+        for mber in tests.Members do
+            for test in mber.Tests do
+                // TODO: Have a helper to get a safe test file name
+                let safeTestName = test.Name
+
+                let writer = writers[test.SourceLanguage]
+
+                let testProjectDirectory = Path.Combine(path, safeTestName)
+                let testProjectPath = Path.Combine(testProjectDirectory, safeTestName + "." + writer.ProjectFileExtension)
+                let testSourcePath = Path.Combine(testProjectDirectory, safeTestName + "." + writer.SourceFileExtension)
+
+                do
+                    use testProjectWriter = XmlWriter.Create testProjectPath
+                    writer.WriteProjectFile(ImmutableArray.Create testSourcePath, references, testProjectWriter)
+
+                do
+                    let source =
+                        { SourceCode.Code = test.Code
+                          SourceCode.Kind = if test.OmitMainMethod then SourceCodeKind.Full else SourceCodeKind.WithMain }
+
+                    use testSourceWriter = new StreamWriter(testSourcePath)
+                    writer.WriteSourceCode(source, testSourceWriter)
+
+                projectFilePaths.Add testProjectPath
+
+        projectFilePaths.ToImmutable()
