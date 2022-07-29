@@ -104,12 +104,18 @@ module TestWriter =
 
                 do
                     use testProjectWriter = XmlWriter.Create testProjectPath
+
+                    testProjectWriter.WriteStartElement "Project"
+                    testProjectWriter.WriteAttributeString("Sdk", "Microsoft.NET.Sdk")
+
                     writer.WriteProjectFile(
                         ImmutableArray.Create testSourcePath,
                         references,
                         testTargetFramework,
                         testProjectWriter
                     )
+
+                    testProjectWriter.WriteEndElement()
 
                 do
                     let source =
